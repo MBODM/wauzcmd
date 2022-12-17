@@ -13,7 +13,7 @@ Exactly the same way as [WAUZ](https://github.com/mbodm/wauz). Instead of select
 - Use double quotes ("") if a folder path contains spaces.
 
 ### Why it exists
-Because i promised that in the "[Notes](https://github.com/mbodm/wauz#notes)" section on the [WAUZ](https://github.com/mbodm/wauz) page.
+Because i promised that in the "[Notes](https://github.com/mbodm/wauz#notes)" section of the [WAUZ](https://github.com/mbodm/wauz) page.
 
 ### Requirements
 
