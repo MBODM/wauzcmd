@@ -9,7 +9,7 @@ This is the command line version of [WAUZ](https://github.com/mbodm/wauz). It wo
 
 ### How it works
 
-Exactly the same way as WAUZ. Instead of selecting the 2 folders in a GUI, just call _wauzcmd.exe_ and pass the 2 folders as command line arguments.
+Exactly like WAUZ. Instead of selecting the 2 folders in a GUI, just call _wauzcmd.exe_ and pass the 2 folders as command line arguments.
 
 A few notes here:
 - Use absolute folder paths.
