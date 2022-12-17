@@ -12,7 +12,7 @@ Exactly the same way as [WAUZ](https://github.com/mbodm/wauz). Instead of select
 A few notes here:
 - Use absolute folder paths.
 - Use double quotes ("") if a folder path contains spaces.
-- Both folders have to exist before starting the application.
+- Both folders have to exist before calling the executable.
 
 For more information have a look at the [WAUZ](https://github.com/mbodm/wauz) page.
 
