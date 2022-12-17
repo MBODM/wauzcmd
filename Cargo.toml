@@ -1,0 +1,20 @@
+[package]
+name = "wauzcmd"
+version = "1.0.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+#MBODM# To decrease the size of the executable the following "[profile.release]" block was copy-pasted from:
+#MBODM# -> https://stackoverflow.com/questions/29008127/why-are-rust-executables-so-huge
+#MBODM# -> https://github.com/johnthagen/min-sized-rust
+#MBODM# To build the release just run the "cargo build --release" command.
+
+[profile.release]
+opt-level = 'z'     # Optimize for size.
+lto = true          # Enable Link Time Optimization.
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic.
+strip = true        # Strip symbols from binary.
