@@ -17,7 +17,7 @@ A few notes here:
 For more information have a look at the [WAUZ](https://github.com/mbodm/wauz) page.
 
 ### Why it exists
-Because i promised in the "[Notes](https://github.com/mbodm/wauz#notes)" section of the [WAUZ](https://github.com/mbodm/wauz) page: There will be a command line version soon. And here it is.
+Because i promised in the "[Notes](https://github.com/mbodm/wauz#notes)" section of the [WAUZ](https://github.com/mbodm/wauz) page: "_There will be also a command line version of WAUZ. Soon._". And here it is.
 
 ### Requirements
 
