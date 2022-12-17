@@ -16,7 +16,9 @@ Exactly the same way as [WAUZ](https://github.com/mbodm/wauz). Instead of select
 Because i promised that in the "[Notes](https://github.com/mbodm/wauz#notes)" section on the [WAUZ](https://github.com/mbodm/wauz) page.
 
 ### Requirements
+
 - 64-bit Windows
+
 There are not any other special requirements. It is written in Rust and natively compiled for the Windows x64 platform.
 
 #### Have fun.
