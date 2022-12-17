@@ -43,20 +43,24 @@ pub fn run() -> AppResult {
     if !dest_path.is_dir() {
         return err("Given destination argument is not a folder.");
     }
-    let path = source_path.canonicalize().or(Err(AppErr::new(
-        "Could not determine absolute folder path.",
+    let absolute_source_path = source_path.canonicalize().or(Err(AppErr::new(
+        "Could not determine absolute path of source folder.",
         0,
     )))?;
-    let x = path.to_str().unwrap();
-    let x = helper::convert_windows_unc_path(x.to_string());
-    println!("{}", x);
-
-    // let path = fs::canonicalize(source_folder)
-    // if !path.is_absolute() {
-    //     return Err(String::from("absolute not"));
-    // }
-    println!("JIPIIIEEEE");
-    println!("2 params");
+    let absolute_dest_path = dest_path.canonicalize().or(Err(AppErr::new(
+        "Could not determine absolute path of dest folder.",
+        0,
+    )))?;
+    let a_source =
+        helper::convert_windows_unc_path(absolute_source_path.to_str().unwrap().to_string());
+    let a_dest = helper::convert_windows_unc_path(absolute_dest_path.to_str().unwrap().to_string());
+    println!("Source-Folder: {}", a_source);
+    println!("Destination-Folder: {}", a_dest);
+    println!();
+    println!(
+        "Sorry, unzipping is not implemented yet! :( Tool will be finished soon! Nonetheless:"
+    );
+    println!();
     Ok(1)
 }
 
