@@ -4,6 +4,7 @@ mod app;
 mod console;
 mod types;
 mod helper;
+mod unzip;
 
 fn main() -> ExitCode {
     console::show_title();

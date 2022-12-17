@@ -1,9 +1,10 @@
 use crate::{
     helper,
     types::{AppErr, AppResult},
+    unzip,
 };
 
-use std::{env, path::Path};
+use std::{env, fs, path::Path, io::{stdout, Write}, process::Child};
 
 // No need for some code here, to verify name and version from cargo.toml file,
 // since cargo will show an error, if name or version contains an empty string.
@@ -43,24 +44,69 @@ pub fn run() -> AppResult {
     if !dest_path.is_dir() {
         return err("Given destination argument is not a folder.");
     }
-    let absolute_source_path = source_path.canonicalize().or(Err(AppErr::new(
-        "Could not determine absolute path of source folder.",
-        0,
-    )))?;
-    let absolute_dest_path = dest_path.canonicalize().or(Err(AppErr::new(
-        "Could not determine absolute path of dest folder.",
-        0,
-    )))?;
+    let absolute_source_path = source_path
+        .canonicalize()
+        .map_err(|_| AppErr::new("Could not determine absolute path of source folder.", 0))?;
+    let absolute_dest_path = dest_path
+        .canonicalize()
+        .map_err(|_| AppErr::new("Could not determine absolute path of dest folder.", 0))?;
     let a_source =
         helper::convert_windows_unc_path(absolute_source_path.to_str().unwrap().to_string());
     let a_dest = helper::convert_windows_unc_path(absolute_dest_path.to_str().unwrap().to_string());
-    println!("Source-Folder: {}", a_source);
-    println!("Destination-Folder: {}", a_dest);
+    if !unzip::powershell_is_installed() {
+        println!("PS not installed");
+        return Err(AppErr::new("Powershell is not installed.", 0));
+    }
+    println!("Source: {}", a_source);
+    println!("Destination: {}", a_dest);
     println!();
     println!(
         "Sorry, unzipping is not implemented yet! :( Tool will be finished soon! Nonetheless:"
     );
     println!();
+    let paths = fs::read_dir(a_source)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .collect::<Vec<_>>();
+    println!();
+    let zip_files_count = paths.len();
+    println!("Found {zip_files_count} zip files:");
+    for p in &paths {
+        let f = p.display().to_string();
+        println!("{f}");
+    }
+    println!();
+
+    let mut childs: Vec<Child> = Vec::new();
+
+    for p in &paths {
+        let f = p.display().to_string();
+        let c = unzip::unzip_file(f.as_str(), &a_dest)?;
+        childs.push(c);
+        flush(|| print!("..."));
+    }
+
+    let mut all_childs_finished = false;
+    while !all_childs_finished {
+        
+
+        match child.try_wait() {
+            Ok(Some(status)) => println!("exited with: {status}"),
+            Ok(None) => {
+                println!("status not ready yet, let's really wait");
+                let res = child.wait();
+                println!("result: {res:?}");
+            }
+            Err(e) => println!("error attempting to wait: {e}"),
+        }
+
+
+    }
+
+
+    println!();
+    println!("all done");
     Ok(1)
 }
 
@@ -70,4 +116,12 @@ fn is_help_arg(arg: &str) -> bool {
 
 fn err(msg: &str) -> AppResult {
     Err(AppErr::new(msg, 0))
+}
+
+pub fn flush<T>(print_macro: T)
+where
+    T: Fn() -> (),
+{
+    print_macro();
+    stdout().flush().expect("todo")
 }
