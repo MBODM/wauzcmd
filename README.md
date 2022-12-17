@@ -23,6 +23,6 @@ Because i promised in the "[Notes](https://github.com/mbodm/wauz#notes)" section
 
 - 64-bit Windows
 
-There are not any other special requirements. It is written in Rust and natively compiled for the Windows x64 platform.
+There are not any other special requirements. It is written in Rust and the release binaries are natively compiled for the Windows x64 platform.
 
 #### Have fun.
