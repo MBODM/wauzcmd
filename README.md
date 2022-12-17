@@ -4,9 +4,11 @@ A tiny command line unzip tool for World of Warcraft addons
 ![WAUZ](screenshot.png)
 
 ### What it is
+
 This is the command line version of [WAUZ](https://github.com/mbodm/wauz). It works exactly the same way as his "big brother" does. It is a typical command line executable for Windows, written in Rust.
 
 ### How it works
+
 Exactly the same way as [WAUZ](https://github.com/mbodm/wauz). Instead of selecting the 2 folders in a GUI, just call _wauzcmd.exe_ and pass the 2 folders as command line arguments.
 
 A few notes here:
@@ -17,7 +19,12 @@ A few notes here:
 For more information have a look at the [WAUZ](https://github.com/mbodm/wauz) page.
 
 ### Why it exists
-Because i promised in the "[Notes](https://github.com/mbodm/wauz#notes)" section of the [WAUZ](https://github.com/mbodm/wauz) page: "_There will be also a command line version of WAUZ. Soon._". And here it is.
+
+Because i promised in the "[Notes](https://github.com/mbodm/wauz#notes)" section of the [WAUZ](https://github.com/mbodm/wauz) page:
+
+>There will be also a command line version of WAUZ. Soon.
+
+And here it is.
 
 ### Requirements
 
