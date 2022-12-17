@@ -30,6 +30,6 @@ And here it is.
 
 - 64-bit Windows
 
-There are not any other special requirements. It is written in Rust and the release binaries are natively compiled for the Windows x64 platform.
+There are not any other special requirements. It is written in Rust and the release binaries are natively compiled with "_rustc_" for the Windows x64 platform.
 
 #### Have fun.
