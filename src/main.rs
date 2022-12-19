@@ -2,9 +2,11 @@ use std::process::ExitCode;
 
 mod app;
 mod console;
+mod filesystem;
+mod platform;
 mod types;
-mod helper;
 mod unzip;
+mod windows;
 
 fn main() -> ExitCode {
     console::show_title();

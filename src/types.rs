@@ -13,4 +13,25 @@ impl AppErr {
     }
 }
 
-pub type AppResult = Result<usize, AppErr>;
+#[derive(Debug)]
+pub struct ZipFileInfo {
+    file_path: String,
+    file_name: String,
+}
+
+impl ZipFileInfo {
+    pub fn new(file_path: String, file_name: String) -> Self {
+        Self {
+            file_path,
+            file_name,
+        }
+    }
+
+    pub fn file_path(&self) -> String {
+        self.file_path
+    }
+
+    pub fn file_name(&self) -> String {
+        self.file_name
+    }
+}

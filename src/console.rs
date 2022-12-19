@@ -1,3 +1,5 @@
+use std::io::{stdout, Write};
+
 use crate::app;
 
 pub fn show_title() {
@@ -37,4 +39,9 @@ pub fn show_error(msg: &str, show_hint: bool) {
         let app_name = app::NAME;
         println!("Run \"{app_name}.exe --help\" for more information.");
     }
+}
+
+pub fn flush<F: FnOnce()>(closure: F) {
+    closure();
+    stdout().flush().expect("todo");
 }
