@@ -1,15 +1,6 @@
-use std::{
-    env,
-    io::{stdout, Write},
-    path::Path,
-};
+use std::{env, path::Path};
 
-use crate::{
-    console, filesystem, platform,
-    types::AppErr,
-    unzip,
-    windows::{self, powershell_is_available},
-};
+use crate::{filesystem, powershell, types::AppErr, core1, console};
 
 // No need for some code here, to verify name and version from cargo.toml file,
 // since cargo will show an error, if name or version contains an empty string.
@@ -19,21 +10,28 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const AUTHOR: &str = "MBODM";
 pub const DATE: &str = "2022-12-15";
 
-pub fn run() -> Result<usize, AppErr> {
+// The app result states as consts, for some better readability.
+
+pub const OK_VAL_SUCCESS: u8 = 0;
+pub const OK_VAL_NO_ARGUMENTS: u8 = 1;
+pub const ERR_VAL_COMMON_ERROR: u8 = 0;
+pub const ERR_VAL_ARGUMENT_ERROR: u8 = 1;
+
+pub fn run() -> Result<u8, AppErr> {
     let args = env::args().skip(1).collect::<Vec<String>>();
     let args_count = args.len();
     if args_count > 2 {
-        return Err(AppErr::new("Too many arguments.", 1));
+        return arg_err("Too many arguments.");
     }
     if args_count == 0 || args.iter().any(|arg| is_help_arg(arg)) {
-        return Ok(0);
+        return Ok(OK_VAL_NO_ARGUMENTS);
     }
     if args_count == 1 {
         let path = Path::new(args[0].as_str());
         if path.exists() && path.is_dir() {
-            return Err(AppErr::new("Not enough arguments.", 1));
+            return arg_err("Not enough arguments.");
         }
-        return Err(AppErr::new("Unknown argument.", 1));
+        return arg_err("Unknown argument.");
     }
     let source_path = Path::new(args[0].as_str());
     let dest_path = Path::new(args[1].as_str());
@@ -49,53 +47,37 @@ pub fn run() -> Result<usize, AppErr> {
     if !dest_path.is_dir() {
         return err("Given destination argument is not a folder.");
     }
-    let source_folder = filesystem::get_absolute_path_as_string(source_path);
-    let dest_folder = filesystem::get_absolute_path_as_string(dest_path);
     println!("Given source folder:");
-    println!("- {source_folder}");
+    println!("- {}", filesystem::get_absolute_path(source_path)?);
     println!();
     println!("Given destination folder:");
-    println!("- {dest_folder}");
+    println!("- {}", filesystem::get_absolute_path(dest_path)?);
     println!();
-    if platform::is_windows() && !windows::powershell_is_available() {
+    if !powershell::is_available() {
         return err("PowerShell is not available.");
     }
-    let zip_file_infos = filesystem::get_zip_file_infos_from_folder(source_path);
-    let zip_file_infos_count = zip_file_infos.len();
-    println!("Found {zip_file_infos_count} zip files in source folder:");
-    for zip_file_info in zip_file_infos {
-        let zip_file_name = zip_file_info.file_name();
-        println!("- {zip_file_name}");
-    }
+    let zip_files = filesystem::get_zip_files(source_path)?;
+    println!("Found {} zip files in source folder:", zip_files.len());
+    zip_files
+        .iter()
+        .for_each(|zip_file| println!("- {}", zip_file.file_name));
     println!();
-    print!("Start unzip...");
-    // //let unzipped_files_count = 999;
-    // let progress_closure = || console::flush(|| print!("."));
-    // let unzipped_files_count = unzip::unzip_all_zip_files(source_path, dest_path, progress_closure);
-    // print!("Finished.");
-    // println!();
-    // println!("Successfully unzipped {unzipped_files_count} zip files.");
-    Ok(1)
+    print!("Unzip...");
+    let success_count = core1::unzip(zip_files.as_slice(), dest_path,  || console::flush("."));
+    print!("Done.");
+    println!();
+    println!("Successfully unzipped {} zip files.", success_count);
+    Ok(OK_VAL_SUCCESS)
 }
-
-// for p2 in &paths {
-//     let f = p2.display().to_string();
-//     println!("spawn unzip for {f}");
-//     let child = unzip::unzip_file(f.as_str(), &a_dest).unwrap();
-//     childs.push();
-//     //flush(|| println!("created child with pid {pid}"));
-// }
-// println!();
-// for c in childs.iter_mut() {
-//     let pid = c.id();
-//     println!("wait for pid {pid}");
-//     c.wait();
-// }
 
 fn is_help_arg(arg: &str) -> bool {
     arg == "-h" || arg == "--help" || arg == "/?"
 }
 
-fn err(msg: &str) -> Result<usize, AppErr> {
-    Err(AppErr::new(msg, 0))
+fn err<T>(msg: &str) -> Result<T, AppErr> {
+    Err(AppErr::new(msg.to_string(), ERR_VAL_COMMON_ERROR))
+}
+
+fn arg_err<T>(msg: &str) -> Result<T, AppErr> {
+    Err(AppErr::new(msg.to_string(), ERR_VAL_ARGUMENT_ERROR))
 }

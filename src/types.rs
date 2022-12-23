@@ -1,37 +1,37 @@
 #[derive(Debug)]
 pub struct AppErr {
     pub msg: String,
-    pub val: usize,
+    pub val: u8,
 }
 
 impl AppErr {
-    pub fn new(msg: &str, val: usize) -> Self {
+    pub fn new(msg: String, val: u8) -> Self {
+        Self { msg, val }
+    }
+
+    pub fn from_string(msg: String) -> Self {
+        Self { msg, val: 0 }
+    }
+
+    pub fn from_str(msg: &str) -> Self {
         Self {
             msg: msg.to_string(),
-            val,
+            val: 0,
         }
     }
 }
 
 #[derive(Debug)]
-pub struct ZipFileInfo {
-    file_path: String,
-    file_name: String,
+pub struct ZipFile {
+    pub absolute_path: String,
+    pub file_name: String,
 }
 
-impl ZipFileInfo {
-    pub fn new(file_path: String, file_name: String) -> Self {
+impl ZipFile {
+    pub fn new(absolute_path: String, file_name: String) -> Self {
         Self {
-            file_path,
+            absolute_path,
             file_name,
         }
-    }
-
-    pub fn file_path(&self) -> String {
-        self.file_path
-    }
-
-    pub fn file_name(&self) -> String {
-        self.file_name
     }
 }

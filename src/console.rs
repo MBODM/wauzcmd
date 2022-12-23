@@ -3,24 +3,28 @@ use std::io::{stdout, Write};
 use crate::app;
 
 pub fn show_title() {
-    let app_name = app::NAME;
-    let app_version = app::VERSION;
-    let app_author = app::AUTHOR;
-    let app_date = app::DATE;
     println!();
-    println!("{app_name} {app_version} (by {app_author} {app_date})");
+    println!(
+        "{} {} (by {} {})",
+        app::NAME.to_uppercase(),
+        app::VERSION,
+        app::AUTHOR,
+        app::DATE
+    );
     println!();
 }
 
 pub fn show_usage() {
-    let app_name = app::NAME;
     println!("A tiny unzip tool for World of Warcraft addons ");
     println!();
     println!("Start executable with 2 existing folders as arguments and use double quotes (\"\") if a path contains spaces.");
     println!();
     println!("Usage:");
     println!();
-    println!("{app_name}.exe \"path-to-SOURCE-folder\" \"path-to-DESTINATION-folder\"");
+    println!(
+        "{}.exe \"path-to-SOURCE-folder\" \"path-to-DESTINATION-folder\"",
+        app::NAME.to_lowercase()
+    );
     println!();
     println!("  SOURCE       The folder which contains the addon zip files (typically a temporary download folder)");
     println!("  DESTINATION  The folder to unzip the addons into (typically the World of Warcraft 'AddOns' folder)");
@@ -33,15 +37,18 @@ pub fn show_outro() {
 }
 
 pub fn show_error(msg: &str, show_hint: bool) {
-    println!("Error: {msg}");
+    assert!(!msg.is_empty());
+    println!("Error: {}", msg);
     if show_hint {
         println!();
-        let app_name = app::NAME;
-        println!("Run \"{app_name}.exe --help\" for more information.");
+        println!(
+            "Run \"{}.exe --help\" for more information.",
+            app::NAME.to_lowercase()
+        );
     }
 }
 
-pub fn flush<F: FnOnce()>(closure: F) {
-    closure();
-    stdout().flush().expect("todo");
+pub fn flush(msg: &str) {
+    print!("{}", msg);
+    stdout().flush().expect("TODO"); // <-- TODO: Error handling.
 }
